@@ -64,7 +64,7 @@ public class MainController {
         if (userId != -1) {
             BankSession session = new BankSession(null, bankModel.getUserById(userId), null);
             model.addAttribute("session", session);
-            return "forward:/user" + userId;
+            return "forward:/user";
         }
         else {
             return "register";

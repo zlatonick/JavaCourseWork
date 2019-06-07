@@ -4,100 +4,100 @@
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Manager page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
 </head>
 <body>
-<table cellspacing="0" cellpadding="0">
-    <tr>
-        <td>
-            <table>
-                <tr>
-                    <td><h4 th:text="'Client ' + ${client_info.getLogin()}" /></td>
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-sm"></div>
+        <div class="col-sm">
+            <h2>Manager cabinet</h2>
+        </div>
+        <div class="col-sm"></div>
+    </div>
+    <div class="row mt-5">
+        <div class="col">
+            <div class="container">
+                <div class="row">
+                    <div class="col"><h4 th:text="'Client ' + ${client_info.getLogin()}" /></div>
                     <form action="/manager/user" method="post">
-                        <td>
+                        <div class="col">
                             <select name="user_id">
                                 <th:block th:each="item : ${users}">
                                     <option th:value="${item.getUserId()}" th:text="${item.getLogin()}"></option>
                                 </th:block>
                             </select>
-                        </td>
-                        <td>
+                        </div>
+                        <div class="col">
                             <button type="submit" name="action" value="manager">Make a manager</button>
-                        </td>
-                        <td>
+                        </div>
+                        <div class="col">
                             <button type="submit" name="action" value="select">Select</button>
-                        </td>
+                        </div>
                     </form>
-                </tr>
-                <tr><td><h4>Accounts</h4></td></tr>
-                <th:block th:each="item : ${accounts}">
-                    <form action="/manager/account" method="post">
-                        <tr>
-                            <td th:text="${item.getType().name()}"></td>
-                            <td th:text="${item.getNumber()}"></td>
-                            <td>
-                                <button type="submit" >Select</button>
-                            </td>
-                        </tr>
-                        <input name="account_id" type="hidden" th:value="${item.getAccountId()}">
-                    </form>
-                </th:block>
-            </table>
-        </td>
-        <td>
-            <table>
-                <tr><th>Account requests</th></tr>
+                </div>
+            </div>
+        </div>
+        <div class="col-7">
+            <div class="container">
+                <div class="row"><div class="col"><h4>Account requests</h4></div></div>
                 <th:block th:each="item : ${requests}">
-                    <tr>
-                        <td th:text="${item.getValue()}"></td>
-                        <td th:text="${item.getKey().getType().name()}"></td>
-                        <td th:text="'$' + ${item.getKey().getAmount().toString()}"></td>
-                        <td th:text="${item.getKey().getRate().toString()} + '%'"></td>
-                        <td>
+                    <div class="row">
+                        <div class="col" th:text="${item.getValue()}"></div>
+                        <div class="col" th:text="${item.getKey().getType().name()}"></div>
+                        <div class="col" th:text="'$' + ${item.getKey().getAmount().toString()}"></div>
+                        <div class="col" th:text="${item.getKey().getRate().toString()} + '%'"></div>
+                        <div class="col">
                             <form action="/manager/accept" method="post">
                                 <button type="submit" >Accept</button>
                                 <input name="request_id" type="hidden" th:value="${item.getKey().getRequestId()}">
                             </form>
-                        </td>
-                        <td>
+                        </div>
+                        <div class="col">
                             <form action="/manager/decline" method="post">
                                 <button type="submit" >Decline</button>
                                 <input name="request_id" type="hidden" th:value="${item.getKey().getRequestId()}">
                             </form>
-                        </td>
-                    </tr>
+                        </div>
+                    </div>
                 </th:block>
-            </table>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <table>
-                <tr><th>Manager data</th></tr>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-5">
+        <div class="col">
+            <div class="container">
+                <div class="row"><div class="col"><h4>Manager data</h4></div></div>
                 <form action="/manager/change" method="post">
-                    <tr>
+                    <div class="row">
                         <td th:text="'First name: ' + ${userinfo.getFirstName()}" />
-                        <td><input name="new_first_name" type="text"></td>
-                        <td><button type="submit" >New first name</button></td>
-                    </tr>
-                    <tr>
+                        <div class="col"><input name="new_first_name" type="text">
+                        <button type="submit" >New first name</button></div>
+                    </div>
+                    <div class="row">
                         <td th:text="'Last name: ' + ${userinfo.getLastName()}" />
-                        <td><input name="new_last_name" type="text"></td>
-                        <td><button type="submit" >New last name</button></td>
-                    </tr>
-                    <tr>
+                        <div class="col"><input name="new_last_name" type="text">
+                        <button type="submit" >New last name</button></div>
+                    </div>
+                    <div class="row">
                         <td th:text="'Phone: ' + ${userinfo.getPhone()}" />
-                        <td><input name="new_phone" type="text"></td>
-                        <td><button type="submit" >New phone</button></td>
-                    </tr>
-                    <tr>
+                        <div class="col"><input name="new_phone" type="text">
+                        <button type="submit" >New phone</button></div>
+                    </div>
+                    <div class="row">
                         <td th:text="'E-mail: ' + ${userinfo.getEmail()}" />
-                        <td><input name="new_email" type="text"></td>
-                        <td><button type="submit" >New e-mail</button></td>
-                    </tr>
+                        <div class="col"><input name="new_email" type="text">
+                        <button type="submit" >New e-mail</button></div>
+                    </div>
                 </form>
-            </table>
-        </td>
-    </tr>
-</table>
+            </div>
+        </div>
+        <div class="col"></div>
+    </div>
+</div>
 </body>
 </html>
