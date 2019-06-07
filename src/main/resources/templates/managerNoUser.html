@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Manager page</title>
+</head>
+<body>
+<table cellspacing="0" cellpadding="0">
+    <tr>
+        <td>
+            <table>
+                <tr>
+                    <td><h4>Select the client</h4></td>
+                    <form action="/manager/user" method="post">
+                        <td>
+                            <select name="user_id">
+                                <th:block th:each="item : ${users}">
+                                    <option th:value="${item.getUserId()}" th:text="${item.getLogin()}"></option>
+                                </th:block>
+                            </select>
+                        </td>
+                        <td>
+                            <button type="submit" name="action" value="manager">Make a manager</button>
+                        </td>
+                        <td>
+                            <button type="submit" name="action" value="select">Select</button>
+                        </td>
+                    </form>
+                </tr>
+            </table>
+        </td>
+        <td>
+            <table>
+                <tr><th>Account requests</th></tr>
+                <th:block th:each="item : ${requests}">
+                    <tr>
+                        <td th:text="${item.getValue()}"></td>
+                        <td th:text="${item.getKey().getType().name()}"></td>
+                        <td th:text="'$' + ${item.getKey().getAmount().toString()}"></td>
+                        <td th:text="${item.getKey().getRate().toString()} + '%'"></td>
+                        <td>
+                            <form action="/manager/accept" method="post">
+                                <button type="submit" >Accept</button>
+                                <input name="request_id" type="hidden" th:value="${item.getKey().getRequestId()}">
+                            </form>
+                        </td>
+                        <td>
+                            <form action="/manager/decline" method="post">
+                                <button type="submit" >Decline</button>
+                                <input name="request_id" type="hidden" th:value="${item.getKey().getRequestId()}">
+                            </form>
+                        </td>
+                    </tr>
+                </th:block>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <table>
+                <tr><th>Manager data</th></tr>
+                <form action="/manager/change" method="post">
+                    <tr>
+                        <td th:text="'First name: ' + ${userinfo.getFirstName()}" />
+                        <td><input name="new_first_name" type="text"></td>
+                        <td><button type="submit" >New first name</button></td>
+                    </tr>
+                    <tr>
+                        <td th:text="'Last name: ' + ${userinfo.getLastName()}" />
+                        <td><input name="new_last_name" type="text"></td>
+                        <td><button type="submit" >New last name</button></td>
+                    </tr>
+                    <tr>
+                        <td th:text="'Phone: ' + ${userinfo.getPhone()}" />
+                        <td><input name="new_phone" type="text"></td>
+                        <td><button type="submit" >New phone</button></td>
+                    </tr>
+                    <tr>
+                        <td th:text="'E-mail: ' + ${userinfo.getEmail()}" />
+                        <td><input name="new_email" type="text"></td>
+                        <td><button type="submit" >New e-mail</button></td>
+                    </tr>
+                </form>
+            </table>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

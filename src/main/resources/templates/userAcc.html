@@ -1,0 +1,132 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>User page</title>
+    <style>
+        .bigtable {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+<table class="bigtable" cellspacing="0" cellpadding="0">
+    <tr>
+        <td>
+            <table>
+                <tr><th>Accounts</th></tr>
+                <th:block th:each="item : ${accounts}">
+                    <form action="/user/select" method="post">
+                        <tr>
+                            <td th:text="${item.getType().name()}" />
+                            <td th:text="${item.getNumber()}" />
+                            <td>
+                                <button type="submit" >Select</button>
+                            </td>
+                            <input name="account_id" type="hidden" th:value="${item.getAccountId()}">
+                        </tr>
+                    </form>
+                </th:block>
+                <tr><td><h4>Request new account</h4></td></tr>
+                <tr>
+                    <form action="/user/request" method="post">
+                        <td><input type="radio" name="new_acc_type" value="credit" checked> Credit<br>
+                            <input type="radio" name="new_acc_type" value="deposit"> Deposit</td>
+                        <td><input name="new_acc_amount" type="text" value="Amount of money"></td>
+                        <td><input name="new_acc_rate" type="text" value="Rate"></td>
+                        <td><button type="submit" >Request</button></td>
+                    </form>
+                </tr>
+            </table>
+        </td>
+        <td>
+            <table>
+                <tr><th th:text="'Account: ' + ${account.getNumber()}" /></tr>
+                <tr><td th:text="'Type: ' + ${account.getType().name()}" /></tr>
+                <tr><td th:text="'Balance: $' + ${account.getCurrBalance().toString()}" /></tr>
+                <tr><td th:text="'Till: ' + ${account.getValidity().toString()}" /></tr>
+                <th:block th:if="${account.getType().name() == 'CREDIT'}">
+                    <tr><td th:text="'Rate: ' + ${account.getCreditRate().toString()} + '%'" /></tr>
+                    <tr><td th:text="'Credit limit: $' + ${account.getCreditLimit().toString()}" /></tr>
+                    <tr><td th:text="'Current debt: $' + ${account.getCurrentDebt().toString()}" /></tr>
+                    <tr><td th:text="'Interest charges: $' + ${account.getInterestCharges().toString()}" /></tr>
+                </th:block>
+                <th:block th:if="${account.getType().name() == 'DEPOSIT'}">
+                    <tr><td th:text="'Rate: ' + ${account.getDepositRate().toString()} + '%'" /></tr>
+                    <tr><td th:text="'Deposit amount: $' + ${account.getDepositAmount().toString()}" /></tr>
+                </th:block>
+            </table>
+        </td>
+        <td>
+            <table>
+                <tr><td>
+                    <form action="/user/transfer" method="post">
+                        <h4>Make transfer</h4>
+                        Account number: <input type="text" name="account_number"><br>
+                        Sum: <input type="text" name="amount"><br>
+                        <input type="submit" value="transfer">
+                    </form>
+                </td></tr>
+                <tr><td>
+                    <table>
+                        <tr><th>Pay a bill</th></tr>
+                        <th:block th:each="item : ${bills}">
+                            <form action="/user/pay_bill" method="post">
+                                <tr>
+                                    <td th:text="${item.getName()}" />
+                                    <td th:text="'$' + ${item.getAmount().toString()}" />
+                                    <td th:text="'Till ' + ${item.getPayUntil().toString()}" />
+                                    <td>
+                                        <button type="submit" >Pay</button>
+                                    </td>
+                                </tr>
+                                <input name="bill_id" type="hidden" th:value="${item.getBillId()}">
+                            </form>
+                        </th:block>
+                    </table>
+                </td></tr>
+                <tr><td>
+                    <table>
+                        <tr><th>Account operations</th></tr>
+                        <th:block th:each="item : ${account_operations}">
+                            <tr><td th:text="${item}" /></tr>
+                        </th:block>
+                    </table>
+                </td></tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <table>
+                <tr><th>User data</th></tr>
+                <form action="/user/change" method="post">
+                    <tr>
+                        <td th:text="'First name: ' + ${userinfo.getFirstName()}" />
+                        <td><input name="new_first_name" type="text"></td>
+                        <td><button type="submit" >New first name</button></td>
+                    </tr>
+                    <tr>
+                        <td th:text="'Last name: ' + ${userinfo.getLastName()}" />
+                        <td><input name="new_last_name" type="text"></td>
+                        <td><button type="submit" >New last name</button></td>
+                    </tr>
+                    <tr>
+                        <td th:text="'Phone: ' + ${userinfo.getPhone()}" />
+                        <td><input name="new_phone" type="text"></td>
+                        <td><button type="submit" >New phone</button></td>
+                    </tr>
+                    <tr>
+                        <td th:text="'E-mail: ' + ${userinfo.getEmail()}" />
+                        <td><input name="new_email" type="text"></td>
+                        <td><button type="submit" >New e-mail</button></td>
+                    </tr>
+                </form>
+            </table>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

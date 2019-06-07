@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>User page</title>
+</head>
+<body>
+<table cellspacing="0" cellpadding="0">
+    <tr>
+        <td>
+            <table>
+                <tr><th>Accounts</th></tr>
+                <th:block th:each="item : ${accounts}">
+                    <form action="/user/select" method="post">
+                        <tr>
+                            <td th:text="${item.getType().name()}" />
+                            <td th:text="${item.getNumber()}" />
+                            <td>
+                                <button type="submit" >Select</button>
+                            </td>
+                        </tr>
+                        <input name="account_id" type="hidden" th:value="${item.getAccountId()}">
+                    </form>
+                </th:block>
+                <tr><td><h4>Request new account</h4></td></tr>
+                <tr>
+                    <form action="/user/request" method="post">
+                        <td><input type="radio" name="new_acc_type" value="credit" checked> Credit<br>
+                            <input type="radio" name="new_acc_type" value="deposit"> Deposit</td>
+                        <td><input name="new_acc_amount" type="text" value="Amount of money"></td>
+                        <td><input name="new_acc_rate" type="text" value="Rate"></td>
+                        <td><button type="submit" >Request</button></td>
+                    </form>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <table>
+                <tr><th>User data</th></tr>
+                <form action="/user/change" method="post">
+                    <tr>
+                        <td th:text="'First name: ' + ${userinfo.getFirstName()}" />
+                        <td><input name="new_first_name" type="text"></td>
+                        <td><button type="submit" >New first name</button></td>
+                    </tr>
+                    <tr>
+                        <td th:text="'Last name: ' + ${userinfo.getLastName()}" />
+                        <td><input name="new_last_name" type="text"></td>
+                        <td><button type="submit" >New last name</button></td>
+                    </tr>
+                    <tr>
+                        <td th:text="'Phone: ' + ${userinfo.getPhone()}" />
+                        <td><input name="new_phone" type="text"></td>
+                        <td><button type="submit" >New phone</button></td>
+                    </tr>
+                    <tr>
+                        <td th:text="'E-mail: ' + ${userinfo.getEmail()}" />
+                        <td><input name="new_email" type="text"></td>
+                        <td><button type="submit" >New e-mail</button></td>
+                    </tr>
+                </form>
+            </table>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

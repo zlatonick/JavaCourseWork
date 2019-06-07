@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Manager page</title>
+</head>
+<body>
+<table cellspacing="0" cellpadding="0">
+    <tr>
+        <td>
+            <table>
+                <tr>
+                    <td><h4 th:text="'Client ' + ${client_info.getLogin()}" /></td>
+                    <form action="/manager/user" method="post">
+                        <td>
+                            <select name="user_id">
+                                <th:block th:each="item : ${users}">
+                                    <option th:value="${item.getUserId()}" th:text="${item.getLogin()}"></option>
+                                </th:block>
+                            </select>
+                        </td>
+                        <td>
+                            <button type="submit" name="action" value="manager">Make a manager</button>
+                        </td>
+                        <td>
+                            <button type="submit" name="action" value="select">Select</button>
+                        </td>
+                    </form>
+                </tr>
+                <tr><td><h4>Accounts</h4></td></tr>
+                <th:block th:each="item : ${accounts}">
+                    <form action="/manager/account" method="post">
+                        <tr>
+                            <td th:text="${item.getType().name()}"></td>
+                            <td th:text="${item.getNumber()}"></td>
+                            <td>
+                                <button type="submit" >Select</button>
+                            </td>
+                        </tr>
+                        <input name="account_id" type="hidden" th:value="${item.getAccountId()}">
+                    </form>
+                </th:block>
+            </table>
+        </td>
+        <td>
+            <table>
+                <tr><th th:text="'Account: ' + ${account.getNumber()}" /></tr>
+                <tr><td th:text="'Type: ' + ${account.getType().name()}" /></tr>
+                <tr><td th:text="'Balance: $' + ${account.getCurrBalance().toString()}" /></tr>
+                <tr><td th:text="'Till: ' + ${account.getValidity().toString()}" /></tr>
+                <th:block th:if="${account.getType().name() == 'CREDIT'}">
+                    <tr><td th:text="'Rate: ' + ${account.getCreditRate().toString()} + '%'" /></tr>
+                    <tr><td th:text="'Credit limit: $' + ${account.getCreditLimit().toString()}" /></tr>
+                    <tr><td th:text="'Current debt: $' + ${account.getCurrentDebt().toString()}" /></tr>
+                    <tr><td th:text="'Interest charges: $' + ${account.getInterestCharges().toString()}" /></tr>
+                </th:block>
+                <th:block th:if="${account.getType().name() == 'DEPOSIT'}">
+                    <tr><td th:text="'Rate: ' + ${account.getDepositRate().toString()} + '%'" /></tr>
+                    <tr><td th:text="'Deposit amount: $' + ${account.getDepositAmount().toString()}" /></tr>
+                </th:block>
+                <tr><td>
+                    <table>
+                        <tr><th>Account operations</th></tr>
+                        <th:block th:each="item : ${account_operations}">
+                            <tr><td th:text="${item}"></td></tr>
+                        </th:block>
+                    </table>
+                </td></tr>
+            </table>
+        </td>
+        <td>
+            <form action="/manager/bill" method="post">
+                <table>
+                    <tr><th>Create a bill</th></tr>
+                    <tr><td>
+                        <input name="bill_name" type="text" value="Name">
+                    </td></tr>
+                    <tr><td>
+                        <input name="bill_amount" type="text" value="Sum">
+                    </td></tr>
+                    <tr><td>
+                        <input name="bill_term" type="text" value="Term">
+                    </td></tr>
+                    <tr><td>
+                        <button type="submit" >New bill</button>
+                    </td></tr>
+                </table>
+            </form>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <table>
+                <tr><th>Manager data</th></tr>
+                <form action="/manager/change" method="post">
+                    <tr>
+                        <td th:text="'First name: ' + ${userinfo.getFirstName()}" />
+                        <td><input name="new_first_name" type="text"></td>
+                        <td><button type="submit" >New first name</button></td>
+                    </tr>
+                    <tr>
+                        <td th:text="'Last name: ' + ${userinfo.getLastName()}" />
+                        <td><input name="new_last_name" type="text"></td>
+                        <td><button type="submit" >New last name</button></td>
+                    </tr>
+                    <tr>
+                        <td th:text="'Phone: ' + ${userinfo.getPhone()}" />
+                        <td><input name="new_phone" type="text"></td>
+                        <td><button type="submit" >New phone</button></td>
+                    </tr>
+                    <tr>
+                        <td th:text="'E-mail: ' + ${userinfo.getEmail()}" />
+                        <td><input name="new_email" type="text"></td>
+                        <td><button type="submit" >New e-mail</button></td>
+                    </tr>
+                </form>
+            </table>
+        </td>
+        <td>
+            <table>
+                <tr><th>Account requests</th></tr>
+                <th:block th:each="item : ${requests}">
+                    <tr>
+                        <td th:text="${item.getValue()}"></td>
+                        <td th:text="${item.getKey().getType().name()}"></td>
+                        <td th:text="'$' + ${item.getKey().getAmount().toString()}"></td>
+                        <td th:text="${item.getKey().getRate().toString()} + '%'"></td>
+                        <td>
+                            <form action="/manager/accept" method="post">
+                                <button type="submit" >Accept</button>
+                                <input name="request_id" type="hidden" th:value="${item.getKey().getRequestId()}">
+                            </form>
+                        </td>
+                        <td>
+                            <form action="/manager/decline" method="post">
+                                <button type="submit" >Decline</button>
+                                <input name="request_id" type="hidden" th:value="${item.getKey().getRequestId()}">
+                            </form>
+                        </td>
+                    </tr>
+                </th:block>
+            </table>
+        </td>
+    </tr>
+</table>
+</body>
+</html>
